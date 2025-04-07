@@ -18,7 +18,7 @@ function pow(x, y) {
     if (isNaN(y)) {
         console.log("Помилка: y не є дійсним числом (NaN)!");
         return; 
-        }g
+        }
         
         let powX = 1;
         for (let i = 0; i < y; i++) {
