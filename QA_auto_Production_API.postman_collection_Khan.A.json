@@ -1,0 +1,1249 @@
+{
+	"info": {
+		"_postman_id": "84f65a70-d5a6-460e-ad7d-f629c28c003a",
+		"name": "QA_auto_Production_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37130274",
+		"_collection_link": "https://khananna.postman.co/workspace/Khan_Anna_QA_Technical_Pro~0818e1ae-1777-41dd-948e-a6597f27ce55/collection/37130274-84f65a70-d5a6-460e-ad7d-f629c28c003a?action=share&source=collection_link&creator=37130274"
+	},
+	"item": [
+		{
+			"name": "Negative_cases_in_Field_Password",
+			"item": [
+				{
+					"name": "registration_user_всі_поля_пусті",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mail_test\", pm.variables.replaceIn(\"{{$randomEmail}}\"));",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ststus code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"message\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"\",\n  \"repeatPassword\": \"\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_prod}}/auth/signup",
+							"host": [
+								"{{URL_prod}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "registration_user _одне_поле_пусте",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mail_test\", pm.variables.replaceIn(\"{{$randomEmail}}\"));",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ststus code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"message\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"{{password_test}}\",\n  \"repeatPassword\": \"\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_prod}}/auth/signup",
+							"host": [
+								"{{URL_prod}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "registration_user_паролі_не_збігаються",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mail_test\", pm.variables.replaceIn(\"{{$randomEmail}}\"));",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ststus code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"message\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"{{password_test}}\",\n  \"repeatPassword\": \"{{old_password_test}}\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_prod}}/auth/signup",
+							"host": [
+								"{{URL_prod}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _less_min",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mail_test\", pm.variables.replaceIn(\"{{$randomEmail}}\"));",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ststus code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"message\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"uyhWZ4D\",\n  \"repeatPassword\": \"uyhWZ4D\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_prod}}/auth/signup",
+							"host": [
+								"{{URL_prod}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _more_max",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mail_test\", pm.variables.replaceIn(\"{{$randomEmail}}\"));",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ststus code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"message\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"uyhWZ4DuyhWZ4DuyhWZ4D\",\n  \"repeatPassword\": \"uyhWZ4DuyhWZ4DuyhWZ4D\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_prod}}/auth/signup",
+							"host": [
+								"{{URL_prod}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _without_numbers",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mail_test\", pm.variables.replaceIn(\"{{$randomEmail}}\"));",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ststus code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"message\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"uyhWZbDb\",\n  \"repeatPassword\": \"uyhWZbDb\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_prod}}/auth/signup",
+							"host": [
+								"{{URL_prod}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _without_capital_letter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ststus code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"message\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mail_test\", pm.variables.replaceIn(\"{{$randomEmail}}\"));",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"uyhb6545hgfk\",\n  \"repeatPassword\": \"uyhb6545hgfk\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_prod}}/auth/signup",
+							"host": [
+								"{{URL_prod}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _without_small_letter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ststus code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property(\"message\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mail_test\", pm.variables.replaceIn(\"{{$randomEmail}}\"));",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"NBH6545SFSRF\",\n  \"repeatPassword\": \"NBH6545SFSRF\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_prod}}/auth/signup",
+							"host": [
+								"{{URL_prod}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				}
+			],
+			"description": "Field \"Password\":  \n\\- Wrong data - \"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\"  \n\\- For empty field error - \"Password required\"\n\nmin = 8, max = 15 symbols, minimum 1 integer 1 capital letter and one small letter"
+		},
+		{
+			"name": "registration_user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"mail_test\", pm.variables.replaceIn(\"{{$randomEmail}}\"));",
+							"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+							"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+							"pm.collectionVariables.set(\"password_test\", pm.variables.replaceIn(\"{{$randomPassword}}\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log (\"userId: \", jsonData.data.userId);",
+							"pm.collectionVariables.set(\"userId:\" , jsonData.data.userId)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"{{password_test}}\",\n  \"repeatPassword\": \"{{password_test}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_prod}}/auth/signup",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "user_profile_change",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+							"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+							"//pm.collectionVariables.set(\"country_test\", pm.variables.replaceIn(\"{{$randomCountry}}\")); не працює з назвами з 2-х слів",
+							"const allowedCountries = [",
+							"    \"Germany\",",
+							"    \"France\",",
+							"    \"Italy\",",
+							"    \"Egypt\",",
+							"    \"Poland\",",
+							"    \"Norway\",",
+							"    \"Sweden\",",
+							"    \"Finland\",",
+							"    \"Canada\"",
+							"];",
+							"",
+							"//Випадковий вибір з дозволеного списку",
+							"const randomIndex = Math.floor(Math.random() * allowedCountries.length);",
+							"const country = allowedCountries[randomIndex];",
+							"pm.collectionVariables.set(\"country_test\", country);",
+							"",
+							"pm.collectionVariables.set(\"dateBirth_test\", pm.variables.replaceIn(\"{{$randomDatePast}}\"));",
+							"",
+							"const min = 1000000000000;",
+							"const max = 9999999999999;",
+							"const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;",
+							"const photoFileName = `user-${randomNumber}.jpg`;",
+							"console.log(\"photoFileName:\", photoFileName);",
+							"",
+							"pm.collectionVariables.set(\"photo_test\", photoFileName);",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"photo\": \"{{photo_test}}\",\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"dateBirth\": \"{{dateBirth_test}}\",\n  \"country\": \"{{country_test}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_prod}}/users/profile",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "user_password_change",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"",
+							"// 1. Взяти поточний пароль",
+							"const oldPassword = pm.collectionVariables.get(\"password_test\");",
+							"// 2. Зберегти старий як окрему змінну для oldPassword",
+							"pm.collectionVariables.set(\"old_password_test\", oldPassword);",
+							"// 3. Згенерувати новий пароль",
+							"const newPassword = pm.variables.replaceIn(\"{{$randomPassword}}\");",
+							"// 4. Оновити основний пароль",
+							"pm.collectionVariables.set(\"password_test\", newPassword);",
+							"",
+							"//console.log(\"oldPassword:\", oldPassword);",
+							"//console.log(\"newPassword:\", newPassword);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"oldPassword\": \"{{old_password_test}}\",\n  \"password\": \"{{password_test}}\",\n  \"repeatPassword\": \"{{password_test}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_prod}}/users/password",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"users",
+						"password"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/password' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"oldPassword\": \"FooBar12345\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL_prod}}/auth/logout",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/auth/logout' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"{{mail_test}}\",\n  \"password\": \"{{password_test}}\",\n  \"remember\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_prod}}/auth/signin",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"auth",
+						"signin"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signin' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"remember\": false\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "creates_new_car",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Випадковий carBrandId (1–5)",
+							"const carBrandId = Math.floor(Math.random() * 5) + 1;",
+							"",
+							"// Логіка відповідності carModelId до carBrandId",
+							"let carModelIdRange = [];",
+							"switch (carBrandId) {",
+							"    case 1:",
+							"        carModelIdRange = [1, 5];",
+							"        break;",
+							"    case 2:",
+							"        carModelIdRange = [6, 10];",
+							"        break;",
+							"    case 3:",
+							"        carModelIdRange = [11, 15];",
+							"        break;",
+							"    case 4:",
+							"        carModelIdRange = [16, 18];",
+							"        break;",
+							"    case 5:",
+							"        carModelIdRange = [19, 23];",
+							"        break;",
+							"}",
+							"",
+							"// Генеруємо carModelId в межах діапазону",
+							"const carModelId = Math.floor(Math.random() * (carModelIdRange[1] - carModelIdRange[0] + 1)) + carModelIdRange[0];",
+							"",
+							"// Генеруємо mileage дозволено 0–999999",
+							"const mileage = Math.floor(Math.random() * 1000);",
+							"",
+							"// Зберігаємо значення у змінні колекції",
+							"pm.collectionVariables.set(\"carBrandId\", carBrandId);",
+							"pm.collectionVariables.set(\"carModelId\", carModelId);",
+							"pm.collectionVariables.set(\"mileage\", mileage);",
+							"",
+							"// Виводимо в консоль",
+							"console.log(\"carBrandId:\", carBrandId);",
+							"console.log(\"carModelId:\", carModelId);",
+							"console.log(\"mileage:\", mileage);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log (\"carId\", jsonData.data.id);",
+							"pm.collectionVariables.set(\"carId\" , jsonData.data.id)",
+							"pm.collectionVariables.set(\"carCreatedAt\",jsonData.data.carCreatedAt);",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"carBrandId\": {{carBrandId}},\n  \"carModelId\": {{carModelId}},\n  \"mileage\": {{mileage}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_prod}}/cars",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"cars"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/cars' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"carBrandId\": 1,\n  \"carModelId\": 1,\n  \"mileage\": 122\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "cars/brands_in_Hillel_Qauto",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL_prod}}/cars/brands",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"cars",
+						"brands"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/cars/brands' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "cars/models_in_Hillel_Qauto",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL_prod}}/cars/models",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"cars",
+						"models"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/cars/models' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "users_cars_info",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL_prod}}/cars",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"cars"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/cars' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "expenses",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"carId\": {{carId}},\n  \"reportedAt\": \"{{$isoTimestamp}}\",\n  \"mileage\": 42456,\n  \"liters\": 81,\n  \"totalCost\": 11,\n  \"forceMileage\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_prod}}/expenses",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"expenses"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/expenses' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"carId\": 1,\n  \"reportedAt\": \"2025-05-19\",\n  \"mileage\": 111,\n  \"liters\": 11,\n  \"totalCost\": 11,\n  \"forceMileage\": false\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "delete_users",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL_prod}}/users",
+					"host": [
+						"{{URL_prod}}"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'DELETE' \\\n  'https://qauto.forstudy.space/api/users' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "mail_test",
+			"value": "Astrid66@yahoo.com"
+		},
+		{
+			"key": "name_test",
+			"value": "Nyasia"
+		},
+		{
+			"key": "lastName_test",
+			"value": "Ferry"
+		},
+		{
+			"key": "password_test",
+			"value": "uyhYmJtWZ4DwXXw"
+		},
+		{
+			"key": "userId:",
+			"value": 220276
+		},
+		{
+			"key": "country_test",
+			"value": "France"
+		},
+		{
+			"key": "dateBirth_test",
+			"value": "Thu Mar 13 2025 16:49:06 GMT+0200 (Eastern European Standard Time)"
+		},
+		{
+			"key": "photo_test",
+			"value": "user-6942388265886.jpg",
+			"type": "string"
+		},
+		{
+			"key": "old_password_test",
+			"value": "nmrfoaSZMe5KCCj"
+		},
+		{
+			"key": "carBrandId",
+			"value": 2
+		},
+		{
+			"key": "carModelId",
+			"value": 9
+		},
+		{
+			"key": "mileage",
+			"value": 752
+		},
+		{
+			"key": "carId",
+			"value": 349133
+		},
+		{
+			"key": "carCreatedAt",
+			"value": "2025-05-20T10:37:48.650Z"
+		},
+		{
+			"key": "reportedAt",
+			"value": "2025-05-20T09:34:49.998Z"
+		}
+	]
+}
