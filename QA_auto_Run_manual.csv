@@ -1,0 +1,3 @@
+base_URL,name,lastName,email,password,repeatPassword,carBrandId,carModelId,mileage
+https://qauto.forstudy.space/api,Anna,Khan,Ann.Skywalker_ht6@mail.com,vp81Fl3d1kKfX0y,vp81Fl3d1kKfX0y,3,14,500
+https://qauto2.forstudy.space/api,Anna,Khan,Ann.Skywalker_ht6@mail.com,vp81Fl3d1kKfX0y,vp81Fl3d1kKfX0y,3,14,500
