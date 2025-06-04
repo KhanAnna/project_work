@@ -1,0 +1,302 @@
+{
+	"info": {
+		"_postman_id": "2cef9d44-0e9d-4139-b513-8d727b48b412",
+		"name": "Book ISBN Numbers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37130274",
+		"_collection_link": "https://khananna.postman.co/workspace/Khan_Anna_QA_Technical_Pro~0818e1ae-1777-41dd-948e-a6597f27ce55/collection/37130274-2cef9d44-0e9d-4139-b513-8d727b48b412?action=share&source=collection_link&creator=37130274"
+	},
+	"item": [
+		{
+			"name": "Is Valid ISBN13 Number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"/* //Перевірка статусу результату",
+							"pm.test(\"ISBN is valid\", function () {",
+							"    pm.response.to.have.body(/<m:IsValidISBN13Result>true<\\/m:IsValidISBN13Result>/);",
+							"}); */",
+							"",
+							"//Містить тег IsValidISBN13Response",
+							"pm.test(\"Contains IsValidISBN13Response\", function () {",
+							"    pm.response.to.have.body(/IsValidISBN13Response/);",
+							"});",
+							"",
+							"//Відповідь є XML",
+							"pm.test(\"Response is XML\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"xml\");",
+							"});",
+							"",
+							"//Парсинг XML і перевірка значення",
+							"pm.test(\"Parsed XML returns true\", function () {",
+							"    var jsonData = xml2Json(pm.response.text());",
+							"    pm.expect(jsonData[\"soap:Envelope\"][\"soap:Body\"][\"m:IsValidISBN13Response\"][\"m:IsValidISBN13Result\"]).to.eql(\"true\");",
+							"});",
+							"",
+							"//Тіло відповіді містить тег Result з булевим значенням",
+							"pm.test(\"Response contains boolean result\", function () {",
+							"    const body = pm.response.text();",
+							"    pm.expect(body).to.match(/<m:IsValidISBN13Result>(true|false)<\\/m:IsValidISBN13Result>/);",
+							"});",
+							"",
+							"//Перевірка наявності namespace http://webservices.daehosting.com/ISBN",
+							"pm.test(\"Correct namespace is used\", function () {",
+							"    pm.expect(pm.response.text()).to.include('xmlns:m=\"http://webservices.daehosting.com/ISBN\"');",
+							"});",
+							"",
+							"//Статус-код 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//Content-Type правильний",
+							"pm.test(\"Content-Type is text/xml\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"text/xml; charset=utf-8\");",
+							"});",
+							"",
+							"//Response time < 1000ms",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"//Server header існує",
+							"pm.test(\"Header contains Server\", function () {",
+							"    pm.response.to.have.header(\"Server\");",
+							"});",
+							"",
+							"//Content-Length — число",
+							"pm.test(\"Content-Length is a number\", function () {",
+							"    var length = pm.response.headers.get(\"Content-Length\");",
+							"    pm.expect(length).to.match(/^\\d+$/);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Масив валідних ISBN-13",
+							"const validISBNs = [",
+							"    \"978-1-4612-9090-2\",",
+							"    \"978-0-545-01022-1\",",
+							"    \"978-0-262-13472-9\",",
+							"    \"978-0-596-52068-7\",",
+							"    \"978-0-201-03801-9\",",
+							"    \"978-1-56619-909-4\",",
+							"    \"978-0-306-40615-7\",",
+							"    \"978-0-13-110362-7\",",
+							"    \"978-0-7432-7356-5\"",
+							"];",
+							"",
+							"// Випадковий вибір",
+							"const randomISBN = validISBNs[Math.floor(Math.random() * validISBNs.length)];",
+							"",
+							"// Запис у змінну колекції",
+							"pm.collectionVariables.set(\"isbn13\", randomISBN);",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <IsValidISBN13 xmlns=\"http://webservices.daehosting.com/ISBN\">\n      <sISBN>{{isbn13}}</sISBN>\n    </IsValidISBN13>\n  </soap:Body>\n</soap:Envelope>\n"
+				},
+				"url": {
+					"raw": "http://webservices.daehosting.com/services/isbnservice.wso",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"daehosting",
+						"com"
+					],
+					"path": [
+						"services",
+						"isbnservice.wso"
+					]
+				},
+				"description": "The test is done by calculation on the first 12 digits and compare the result with the checksum number at the end. You have to pass a 13 digits number."
+			},
+			"response": []
+		},
+		{
+			"name": "Is Valid ISBN10 Number",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Масив валідних ISBN-10",
+							"const validISBN10 = [",
+							"    \"0-306-40615-2\",",
+							"    \"0-201-03801-3\",",
+							"    \"0-13-110362-8\",",
+							"    \"0-596-52068-9\",",
+							"    \"1-56619-909-3\",",
+							"    \"0-7432-7356-7\",",
+							"    \"0-201-53082-1\",",
+							"    \"0-321-14653-0\"",
+							"];",
+							"",
+							"// Випадковий вибір",
+							"const randomISBN10 = validISBN10[Math.floor(Math.random() * validISBN10.length)];",
+							"",
+							"// Збереження у змінну колекції",
+							"pm.collectionVariables.set(\"isbn10\", randomISBN10);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"/* // Перевірка статусу результату",
+							"pm.test(\"ISBN10 is valid\", function () {",
+							"    pm.response.to.have.body(/<m:IsValidISBN10Result>true<\\/m:IsValidISBN10Result>/);",
+							"}); */",
+							"",
+							"// Містить тег IsValidISBN10Response",
+							"pm.test(\"Contains IsValidISBN10Response\", function () {",
+							"    pm.response.to.have.body(/IsValidISBN10Response/);",
+							"});",
+							"",
+							"// Відповідь є XML",
+							"pm.test(\"Response is XML\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"xml\");",
+							"});",
+							"",
+							"// Парсинг XML і перевірка значення",
+							"pm.test(\"Parsed XML returns true\", function () {",
+							"    var jsonData = xml2Json(pm.response.text());",
+							"    pm.expect(jsonData[\"soap:Envelope\"][\"soap:Body\"][\"m:IsValidISBN10Response\"][\"m:IsValidISBN10Result\"]).to.eql(\"true\");",
+							"});",
+							"",
+							"//Тіло відповіді містить тег Result з булевим значенням",
+							"pm.test(\"Response contains boolean result\", function () {",
+							"    const body = pm.response.text();",
+							"    pm.expect(body).to.match(/<m:IsValidISBN10Result>(true|false)<\\/m:IsValidISBN10Result>/);",
+							"});",
+							"",
+							"// Перевірка наявності namespace http://webservices.daehosting.com/ISBN",
+							"pm.test(\"Correct namespace is used\", function () {",
+							"    pm.expect(pm.response.text()).to.include('xmlns:m=\"http://webservices.daehosting.com/ISBN\"');",
+							"});",
+							"",
+							"// Статус-код 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Content-Type правильний",
+							"pm.test(\"Content-Type is text/xml\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\", \"text/xml; charset=utf-8\");",
+							"});",
+							"",
+							"// Response time < 1000ms",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"// Server header існує",
+							"pm.test(\"Header contains Server\", function () {",
+							"    pm.response.to.have.header(\"Server\");",
+							"});",
+							"",
+							"// Content-Length — число",
+							"pm.test(\"Content-Length is a number\", function () {",
+							"    var length = pm.response.headers.get(\"Content-Length\");",
+							"    pm.expect(length).to.match(/^\\d+$/);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <IsValidISBN10 xmlns=\"http://webservices.daehosting.com/ISBN\">\n      <sISBN>{{isbn10}}</sISBN>\n    </IsValidISBN10>\n  </soap:Body>\n</soap:Envelope>\n"
+				},
+				"url": {
+					"raw": "http://webservices.daehosting.com/services/isbnservice.wso",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"daehosting",
+						"com"
+					],
+					"path": [
+						"services",
+						"isbnservice.wso"
+					]
+				},
+				"description": "The test is done by calculation on the first 9 digits and compare the result with the checksum number at the end. You have to pass a 10 digits number or 8 digits and an X."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "isbn13",
+			"value": "978-0-262-13472-9"
+		},
+		{
+			"key": "isbn10",
+			"value": "0-7432-7356-7"
+		}
+	]
+}
