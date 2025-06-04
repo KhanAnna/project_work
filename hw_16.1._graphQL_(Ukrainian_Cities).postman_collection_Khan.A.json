@@ -1,0 +1,344 @@
+{
+	"info": {
+		"_postman_id": "e3d0b439-4d5a-4472-9d5a-6d8b51475755",
+		"name": "ДЗ_16.1._graphQL_(Ukrainian_Cities)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37130274",
+		"_collection_link": "https://khananna.postman.co/workspace/Khan_Anna_QA_Technical_Pro~0818e1ae-1777-41dd-948e-a6597f27ce55/collection/37130274-e3d0b439-4d5a-4472-9d5a-6d8b51475755?action=share&source=collection_link&creator=37130274"
+	},
+	"item": [
+		{
+			"name": "Запит на отримання всіх міст",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();",
+							"const cities = json.data.getAllCities;",
+							"// Перемішати масив",
+							"const shuffled = cities.sort(() => 0.5 - Math.random());",
+							"const randomIds = shuffled.slice(0, 4).map(c => c.id);",
+							"",
+							"pm.collectionVariables.set(\"city_id_1\", randomIds[0]);",
+							"pm.collectionVariables.set(\"city_id_2\", randomIds[1]);",
+							"pm.collectionVariables.set(\"city_id_3\", randomIds[2]);",
+							"pm.collectionVariables.set(\"city_id_4\", randomIds[3]);",
+							"",
+							"/* console.log(\"city_id_1:\", randomIds[0]);",
+							"console.log(\"city_id_2:\", randomIds[1]);",
+							"console.log(\"city_id_3:\", randomIds[2]);",
+							"console.log(\"city_id_4:\", randomIds[3]); */",
+							"",
+							"// Витягуємо всі значення square",
+							"const squares = cities",
+							"  .map(city => city.square)",
+							"  .filter(square => typeof square === \"number\");",
+							"",
+							"// Підсумовуємо",
+							"const totalSquare = squares.reduce((sum, sq) => sum + sq, 0);",
+							"",
+							"// Знаходимо середнє",
+							"const averageSquare = squares.length > 0 ? totalSquare / squares.length : 0;",
+							"",
+							"/* console.log(\"Кількість міст:\", squares.length);",
+							"console.log(\"Загальна площа:\", totalSquare);",
+							"console.log(\"Середня площа:\", averageSquare); */",
+							"",
+							"pm.collectionVariables.set(\"average_square\", averageSquare);",
+							"",
+							"const body = pm.response.json();",
+							"pm.test(\"Відповідь не містить помилок\", function () {",
+							"  pm.expect(body.errors).to.be.undefined;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query{\r\n  getAllCities{\r\n    id\r\n    name\r\n    square\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Запит на отримання description",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const data = pm.response.json().data;",
+							"",
+							"pm.test(\"Опис кожного міста не порожній\", function () {",
+							"  [\"City1\", \"City2\", \"City3\", \"City4\"].forEach(key => {",
+							"    pm.expect(data[key]).to.be.a(\"string\").and.not.empty;",
+							"  });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\r\n  City1: getCityDescription(id: \"{{city_id_1}}\") \r\n  City2: getCityDescription(id: \"{{city_id_2}}\") \r\n  City3: getCityDescription(id: \"{{city_id_3}}\")\r\n  City4: getCityDescription(id: \"{{city_id_4}}\") \r\n}\r\n\r\n\r\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Запит на отримання міст в діапазоні",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Отримуємо значення ID як числа",
+							"const ids = [",
+							"  parseInt(pm.collectionVariables.get(\"city_id_1\")),",
+							"  parseInt(pm.collectionVariables.get(\"city_id_2\")),",
+							"  parseInt(pm.collectionVariables.get(\"city_id_3\")),",
+							"  parseInt(pm.collectionVariables.get(\"city_id_4\"))",
+							"];",
+							"",
+							"const minId = Math.min(...ids);",
+							"const maxId = Math.max(...ids);",
+							"",
+							"pm.collectionVariables.set(\"min_city_id\", minId);",
+							"pm.collectionVariables.set(\"max_city_id\", maxId);",
+							"",
+							"//console.log(\"Мінімальний ID:\", minId);",
+							"//console.log(\"Максимальний ID:\", maxId);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();",
+							"const cities = json.data.getCityByRangeId;",
+							"",
+							"const minId = parseInt(pm.collectionVariables.get(\"min_city_id\"));",
+							"const maxId = parseInt(pm.collectionVariables.get(\"max_city_id\"));",
+							"",
+							"// Перевірка: всі міста мають id в межах [minId, maxId]",
+							"let allWithinRange = true;",
+							"",
+							"for (let city of cities) {",
+							"  const cityId = parseInt(city.id);",
+							"  if (cityId < minId || cityId > maxId) {",
+							"    console.log(\"ID ${cityId} поза діапазоном (${minId} - ${maxId})\");",
+							"    allWithinRange = false;",
+							"  }",
+							"}",
+							"",
+							"pm.test(\"Усі міста у відповіді мають id у межах вибраного діапазону\", function () {",
+							"  pm.expect(allWithinRange).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n  getCityByRangeId(filter: { minId: {{min_city_id}}, maxId: {{max_city_id}} }) {\n    id\n    name\n    square\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Запит на створення нового міста",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Масив назв міст (можна розширити)",
+							"const cityNames = [",
+							"  \"Новоград\", \"Сонячне\", \"Зелений Бір\", \"Річкове\", \"Гірське\", \"Місячне\", \"Калинівка\", \"Тополине\", \"Діброва\", \"Оріхове\"",
+							"];",
+							"",
+							"// Випадкове місто",
+							"const randomCity = cityNames[Math.floor(Math.random() * cityNames.length)];",
+							"",
+							"// Зберігаємо в змінну",
+							"pm.collectionVariables.set(\"new_city_name\", randomCity);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();",
+							"const city = json.data.addCity;",
+							"",
+							"pm.test(\"Усі поля міста не порожні та валідні\", function () {",
+							"  pm.expect(city).to.have.property(\"id\").that.is.a(\"string\").and.is.not.empty;",
+							"  pm.expect(city).to.have.property(\"name\").that.is.a(\"string\").and.is.not.empty;",
+							"  pm.expect(city).to.have.property(\"description\").that.is.a(\"string\").and.is.not.empty;",
+							"  pm.expect(city).to.have.property(\"square\").that.is.a(\"number\").and.is.above(0);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\n  addCity(name: \"{{new_city_name}}\",square:{{average_square}},description:\"Best\"){\n    id\n    name\n    square\n    ... on City{\n      description\n    }\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://graphql-ukrainian-cities.hillel.it/graphql",
+			"type": "string"
+		},
+		{
+			"key": "city_id_1",
+			"value": "21"
+		},
+		{
+			"key": "city_id_2",
+			"value": "24"
+		},
+		{
+			"key": "city_id_3",
+			"value": "18"
+		},
+		{
+			"key": "city_id_4",
+			"value": "4"
+		},
+		{
+			"key": "average_square",
+			"value": 184.88
+		},
+		{
+			"key": "min_city_id",
+			"value": 4
+		},
+		{
+			"key": "max_city_id",
+			"value": 24
+		},
+		{
+			"key": "new_city_name",
+			"value": "Оріхове"
+		}
+	]
+}
