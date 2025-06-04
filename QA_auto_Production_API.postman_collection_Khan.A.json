@@ -1,0 +1,3182 @@
+{
+	"info": {
+		"_postman_id": "84f65a70-d5a6-460e-ad7d-f629c28c003a",
+		"name": "QA_auto_Production_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37130274",
+		"_collection_link": "https://khananna.postman.co/workspace/Khan_Anna_QA_Technical_Pro~0818e1ae-1777-41dd-948e-a6597f27ce55/collection/37130274-84f65a70-d5a6-460e-ad7d-f629c28c003a?action=share&source=collection_link&creator=37130274"
+	},
+	"item": [
+		{
+			"name": "Negative_cases_in_Field_Password",
+			"item": [
+				{
+					"name": "registration_user_all_fields_empty",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const names = ['Andriy', 'Olena', 'Serhii', 'Nadia', 'Ivan', 'Iryna'];",
+									"const surnames = ['Shevchenko', 'Skywalker', 'Petrenko', 'Bondarenko'];",
+									"const domains = ['gmail.com', 'yahoo.com', 'mail.com', 'outlook.com'];",
+									"const extraChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';",
+									"",
+									"// Випадкові елементи",
+									"const name = names[Math.floor(Math.random() * names.length)];",
+									"const surname = surnames[Math.floor(Math.random() * surnames.length)];",
+									"const domain = domains[Math.floor(Math.random() * domains.length)];",
+									"",
+									"// Додаємо 3 випадкових символи",
+									"let randomSuffix = '';",
+									"for (let i = 0; i < 3; i++) {",
+									"    randomSuffix += extraChars.charAt(Math.floor(Math.random() * extraChars.length));",
+									"}",
+									"",
+									"// Функція для форматування: перша літера велика, решта — малі",
+									"function capitalize(str) {",
+									"    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();",
+									"}",
+									"",
+									"const formattedName = capitalize(name);",
+									"const formattedSurname = capitalize(surname);",
+									"",
+									"// Формуємо email",
+									"const email = `${formattedName}.${formattedSurname}_${randomSuffix}@${domain}`;",
+									"",
+									"pm.collectionVariables.set(\"generatedEmail\", email);",
+									"// console.log(\"Згенерований email:\", email);",
+									"",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"message\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"\\\"password\\\" is not allowed to be empty\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"\",\n  \"repeatPassword\": \"\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "registration_user_one_field_empty",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const names = ['Andriy', 'Olena', 'Serhii', 'Nadia', 'Ivan', 'Iryna'];",
+									"const surnames = ['Shevchenko', 'Skywalker', 'Petrenko', 'Bondarenko'];",
+									"const domains = ['gmail.com', 'yahoo.com', 'mail.com', 'outlook.com'];",
+									"const extraChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';",
+									"",
+									"// Випадкові елементи",
+									"const name = names[Math.floor(Math.random() * names.length)];",
+									"const surname = surnames[Math.floor(Math.random() * surnames.length)];",
+									"const domain = domains[Math.floor(Math.random() * domains.length)];",
+									"",
+									"// Додаємо 3 випадкових символи",
+									"let randomSuffix = '';",
+									"for (let i = 0; i < 3; i++) {",
+									"    randomSuffix += extraChars.charAt(Math.floor(Math.random() * extraChars.length));",
+									"}",
+									"",
+									"// Функція для форматування: перша літера велика, решта — малі",
+									"function capitalize(str) {",
+									"    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();",
+									"}",
+									"",
+									"const formattedName = capitalize(name);",
+									"const formattedSurname = capitalize(surname);",
+									"",
+									"// Формуємо email",
+									"const email = `${formattedName}.${formattedSurname}_${randomSuffix}@${domain}`;",
+									"",
+									"pm.collectionVariables.set(\"generatedEmail\", email);",
+									"// console.log(\"Згенерований email:\", email);",
+									"",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"message\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"\\\"repeatPassword\\\" is not allowed to be empty\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"{{password_test}}\",\n  \"repeatPassword\": \"\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "registration_user_passwords_mismatch",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const names = ['Andriy', 'Olena', 'Serhii', 'Nadia', 'Ivan', 'Iryna'];",
+									"const surnames = ['Shevchenko', 'Skywalker', 'Petrenko', 'Bondarenko'];",
+									"const domains = ['gmail.com', 'yahoo.com', 'mail.com', 'outlook.com'];",
+									"const extraChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';",
+									"",
+									"// Випадкові елементи",
+									"const name = names[Math.floor(Math.random() * names.length)];",
+									"const surname = surnames[Math.floor(Math.random() * surnames.length)];",
+									"const domain = domains[Math.floor(Math.random() * domains.length)];",
+									"",
+									"// Додаємо 3 випадкових символи",
+									"let randomSuffix = '';",
+									"for (let i = 0; i < 3; i++) {",
+									"    randomSuffix += extraChars.charAt(Math.floor(Math.random() * extraChars.length));",
+									"}",
+									"",
+									"// Функція для форматування: перша літера велика, решта — малі",
+									"function capitalize(str) {",
+									"    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();",
+									"}",
+									"",
+									"const formattedName = capitalize(name);",
+									"const formattedSurname = capitalize(surname);",
+									"",
+									"// Формуємо email",
+									"const email = `${formattedName}.${formattedSurname}_${randomSuffix}@${domain}`;",
+									"",
+									"pm.collectionVariables.set(\"generatedEmail\", email);",
+									"// console.log(\"Згенерований email:\", email);",
+									"",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"message\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Passwords do not match\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"{{password_test}}\",\n  \"repeatPassword\": \"{{old_password_test}}\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _less_min",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const names = ['Andriy', 'Olena', 'Serhii', 'Nadia', 'Ivan', 'Iryna'];",
+									"const surnames = ['Shevchenko', 'Skywalker', 'Petrenko', 'Bondarenko'];",
+									"const domains = ['gmail.com', 'yahoo.com', 'mail.com', 'outlook.com'];",
+									"const extraChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';",
+									"",
+									"// Випадкові елементи",
+									"const name = names[Math.floor(Math.random() * names.length)];",
+									"const surname = surnames[Math.floor(Math.random() * surnames.length)];",
+									"const domain = domains[Math.floor(Math.random() * domains.length)];",
+									"",
+									"// Додаємо 3 випадкових символи",
+									"let randomSuffix = '';",
+									"for (let i = 0; i < 3; i++) {",
+									"    randomSuffix += extraChars.charAt(Math.floor(Math.random() * extraChars.length));",
+									"}",
+									"",
+									"// Функція для форматування: перша літера велика, решта — малі",
+									"function capitalize(str) {",
+									"    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();",
+									"}",
+									"",
+									"const formattedName = capitalize(name);",
+									"const formattedSurname = capitalize(surname);",
+									"",
+									"// Формуємо email",
+									"const email = `${formattedName}.${formattedSurname}_${randomSuffix}@${domain}`;",
+									"",
+									"pm.collectionVariables.set(\"generatedEmail\", email);",
+									"// console.log(\"Згенерований email:\", email);",
+									"",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"message\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"uyhWZ4D\",\n  \"repeatPassword\": \"uyhWZ4D\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _more_max",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const names = ['Andriy', 'Olena', 'Serhii', 'Nadia', 'Ivan', 'Iryna'];",
+									"const surnames = ['Shevchenko', 'Skywalker', 'Petrenko', 'Bondarenko'];",
+									"const domains = ['gmail.com', 'yahoo.com', 'mail.com', 'outlook.com'];",
+									"const extraChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';",
+									"",
+									"// Випадкові елементи",
+									"const name = names[Math.floor(Math.random() * names.length)];",
+									"const surname = surnames[Math.floor(Math.random() * surnames.length)];",
+									"const domain = domains[Math.floor(Math.random() * domains.length)];",
+									"",
+									"// Додаємо 3 випадкових символи",
+									"let randomSuffix = '';",
+									"for (let i = 0; i < 3; i++) {",
+									"    randomSuffix += extraChars.charAt(Math.floor(Math.random() * extraChars.length));",
+									"}",
+									"",
+									"// Функція для форматування: перша літера велика, решта — малі",
+									"function capitalize(str) {",
+									"    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();",
+									"}",
+									"",
+									"const formattedName = capitalize(name);",
+									"const formattedSurname = capitalize(surname);",
+									"",
+									"// Формуємо email",
+									"const email = `${formattedName}.${formattedSurname}_${randomSuffix}@${domain}`;",
+									"",
+									"pm.collectionVariables.set(\"generatedEmail\", email);",
+									"// console.log(\"Згенерований email:\", email);",
+									"",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"message\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"uyhWZ4DuyhWZ4DuyhWZ4D\",\n  \"repeatPassword\": \"uyhWZ4DuyhWZ4DuyhWZ4D\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _without_numbers",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const names = ['Andriy', 'Olena', 'Serhii', 'Nadia', 'Ivan', 'Iryna'];",
+									"const surnames = ['Shevchenko', 'Skywalker', 'Petrenko', 'Bondarenko'];",
+									"const domains = ['gmail.com', 'yahoo.com', 'mail.com', 'outlook.com'];",
+									"const extraChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';",
+									"",
+									"// Випадкові елементи",
+									"const name = names[Math.floor(Math.random() * names.length)];",
+									"const surname = surnames[Math.floor(Math.random() * surnames.length)];",
+									"const domain = domains[Math.floor(Math.random() * domains.length)];",
+									"",
+									"// Додаємо 3 випадкових символи",
+									"let randomSuffix = '';",
+									"for (let i = 0; i < 3; i++) {",
+									"    randomSuffix += extraChars.charAt(Math.floor(Math.random() * extraChars.length));",
+									"}",
+									"",
+									"// Функція для форматування: перша літера велика, решта — малі",
+									"function capitalize(str) {",
+									"    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();",
+									"}",
+									"",
+									"const formattedName = capitalize(name);",
+									"const formattedSurname = capitalize(surname);",
+									"",
+									"// Формуємо email",
+									"const email = `${formattedName}.${formattedSurname}_${randomSuffix}@${domain}`;",
+									"",
+									"pm.collectionVariables.set(\"generatedEmail\", email);",
+									"// console.log(\"Згенерований email:\", email);",
+									"",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"message\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"uyhWZbDb\",\n  \"repeatPassword\": \"uyhWZbDb\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _without_capital_letter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"message\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const names = ['Andriy', 'Olena', 'Serhii', 'Nadia', 'Ivan', 'Iryna'];",
+									"const surnames = ['Shevchenko', 'Skywalker', 'Petrenko', 'Bondarenko'];",
+									"const domains = ['gmail.com', 'yahoo.com', 'mail.com', 'outlook.com'];",
+									"const extraChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';",
+									"",
+									"// Випадкові елементи",
+									"const name = names[Math.floor(Math.random() * names.length)];",
+									"const surname = surnames[Math.floor(Math.random() * surnames.length)];",
+									"const domain = domains[Math.floor(Math.random() * domains.length)];",
+									"",
+									"// Додаємо 3 випадкових символи",
+									"let randomSuffix = '';",
+									"for (let i = 0; i < 3; i++) {",
+									"    randomSuffix += extraChars.charAt(Math.floor(Math.random() * extraChars.length));",
+									"}",
+									"",
+									"// Функція для форматування: перша літера велика, решта — малі",
+									"function capitalize(str) {",
+									"    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();",
+									"}",
+									"",
+									"const formattedName = capitalize(name);",
+									"const formattedSurname = capitalize(surname);",
+									"",
+									"// Формуємо email",
+									"const email = `${formattedName}.${formattedSurname}_${randomSuffix}@${domain}`;",
+									"",
+									"pm.collectionVariables.set(\"generatedEmail\", email);",
+									"// console.log(\"Згенерований email:\", email);",
+									"",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"uyhb6545hgfk\",\n  \"repeatPassword\": \"uyhb6545hgfk\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "reg_user _without_small_letter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Response has 'message' field\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"message\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const names = ['Andriy', 'Olena', 'Serhii', 'Nadia', 'Ivan', 'Iryna'];",
+									"const surnames = ['Shevchenko', 'Skywalker', 'Petrenko', 'Bondarenko'];",
+									"const domains = ['gmail.com', 'yahoo.com', 'mail.com', 'outlook.com'];",
+									"const extraChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';",
+									"",
+									"// Випадкові елементи",
+									"const name = names[Math.floor(Math.random() * names.length)];",
+									"const surname = surnames[Math.floor(Math.random() * surnames.length)];",
+									"const domain = domains[Math.floor(Math.random() * domains.length)];",
+									"",
+									"// Додаємо 3 випадкових символи",
+									"let randomSuffix = '';",
+									"for (let i = 0; i < 3; i++) {",
+									"    randomSuffix += extraChars.charAt(Math.floor(Math.random() * extraChars.length));",
+									"}",
+									"",
+									"// Функція для форматування: перша літера велика, решта — малі",
+									"function capitalize(str) {",
+									"    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();",
+									"}",
+									"",
+									"const formattedName = capitalize(name);",
+									"const formattedSurname = capitalize(surname);",
+									"",
+									"// Формуємо email",
+									"const email = `${formattedName}.${formattedSurname}_${randomSuffix}@${domain}`;",
+									"",
+									"pm.collectionVariables.set(\"generatedEmail\", email);",
+									"// console.log(\"Згенерований email:\", email);",
+									"",
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"NBH6545SFSRF\",\n  \"repeatPassword\": \"NBH6545SFSRF\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				}
+			],
+			"description": "Field \"Password\":  \n\\- Wrong data - \"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\"  \n\\- For empty field error - \"Password required\"\n\nmin = 8, max = 15 symbols, minimum 1 integer 1 capital letter and one small letter"
+		},
+		{
+			"name": "Negative_cases_in _user_profile_(Localization_testing)",
+			"item": [
+				{
+					"name": "401_and_localization_test",
+					"item": [
+						{
+							"name": "1_logout",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\" Поле status має значення ОК\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"ok\");",
+											"});",
+											"",
+											"pm.test(\"Ststus code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 2s\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{URL}}/auth/logout",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"auth",
+										"logout"
+									]
+								},
+								"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/auth/logout' \\\n  -H 'accept: application/json'"
+							},
+							"response": []
+						},
+						{
+							"name": "2_user_profile_change_Accept-Language:uk",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+											"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+											"//pm.collectionVariables.set(\"country_test\", pm.variables.replaceIn(\"{{$randomCountry}}\")); не працює з назвами з 2-х слів",
+											"const allowedCountries = [",
+											"    \"Germany\",",
+											"    \"France\",",
+											"    \"Italy\",",
+											"    \"Egypt\",",
+											"    \"Poland\",",
+											"    \"Norway\",",
+											"    \"Sweden\",",
+											"    \"Finland\",",
+											"    \"Canada\"",
+											"];",
+											"",
+											"//Випадковий вибір з дозволеного списку",
+											"const randomIndex = Math.floor(Math.random() * allowedCountries.length);",
+											"const country = allowedCountries[randomIndex];",
+											"pm.collectionVariables.set(\"country_test\", country);",
+											"",
+											"pm.collectionVariables.set(\"dateBirth_test\", pm.variables.replaceIn(\"{{$randomDatePast}}\"));",
+											"",
+											"const min = 1000000000000;",
+											"const max = 9999999999999;",
+											"const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;",
+											"const photoFileName = `user-${randomNumber}.jpg`;",
+											"//console.log(\"photoFileName:\", photoFileName);",
+											"",
+											"pm.collectionVariables.set(\"photo_test\", photoFileName);",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Поле status має текст 'error'\", function () {",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});",
+											"",
+											"pm.test(\"Поле message є рядком (string)\", function () {",
+											"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+											"});",
+											"",
+											"pm.test(\"Поле message містить текст: uk\", function () {",
+											"    pm.expect(jsonData.message).to.eql(\"Не автентифіковано\");",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 2s\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+											"});",
+											"",
+											"pm.test(\"Response is JSON\", function () {",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "uk",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"photo\": \"{{photo_test}}\",\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"dateBirth\": \"{{dateBirth_test}}\",\n  \"country\": \"{{country_test}}\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/users/profile",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"profile"
+									]
+								},
+								"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+							},
+							"response": []
+						},
+						{
+							"name": "3_user_profile_change_?lang=uk",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+											"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+											"//pm.collectionVariables.set(\"country_test\", pm.variables.replaceIn(\"{{$randomCountry}}\")); не працює з назвами з 2-х слів",
+											"const allowedCountries = [",
+											"    \"Germany\",",
+											"    \"France\",",
+											"    \"Italy\",",
+											"    \"Egypt\",",
+											"    \"Poland\",",
+											"    \"Norway\",",
+											"    \"Sweden\",",
+											"    \"Finland\",",
+											"    \"Canada\"",
+											"];",
+											"",
+											"//Випадковий вибір з дозволеного списку",
+											"const randomIndex = Math.floor(Math.random() * allowedCountries.length);",
+											"const country = allowedCountries[randomIndex];",
+											"pm.collectionVariables.set(\"country_test\", country);",
+											"",
+											"pm.collectionVariables.set(\"dateBirth_test\", pm.variables.replaceIn(\"{{$randomDatePast}}\"));",
+											"",
+											"const min = 1000000000000;",
+											"const max = 9999999999999;",
+											"const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;",
+											"const photoFileName = `user-${randomNumber}.jpg`;",
+											"//console.log(\"photoFileName:\", photoFileName);",
+											"",
+											"pm.collectionVariables.set(\"photo_test\", photoFileName);",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Поле status має текст 'error'\", function () {",
+											"    pm.expect(jsonData.status).to.eql(\"error\");",
+											"});",
+											"",
+											"pm.test(\"Поле message є рядком (string)\", function () {",
+											"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+											"});",
+											"",
+											"pm.test(\"Поле message містить текст: uk\", function () {",
+											"    pm.expect(jsonData.message).to.eql(\"Не автентифіковано\");",
+											"});",
+											"",
+											"pm.test(\"Response time is less than 2s\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+											"});",
+											"",
+											"pm.test(\"Response is JSON\", function () {",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "uk",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"photo\": \"{{photo_test}}\",\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"dateBirth\": \"{{dateBirth_test}}\",\n  \"country\": \"{{country_test}}\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/users/profile?lang=uk",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"profile"
+									],
+									"query": [
+										{
+											"key": "lang",
+											"value": "uk"
+										}
+									]
+								},
+								"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+							},
+							"response": []
+						}
+					],
+					"description": "Основні способи, які використовуються для локалізації:\n\n1. Через заголовок `Accept-Language` : `en (de`, `fr`, `uk`, `pl)`\n    \n2. Через параметри URL або тіла запиту передаємо `lang=uk` або `language=de` в URL чи в JSON-запиті. (/user/profile?lang=uk)\n    \n3. Через профіль користувача (в базі):\n    \n\n- Увійди під користувачем, в якого встановлена мова `uk`, `en`, тощо\n    \n- Надішли запит без `Accept-Language`\n    \n- Подивися, чи локалізація застосовується автоматично"
+				},
+				{
+					"name": "user_profile_change_empty_body",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить вірний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Empty body is not allowed\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "user_profile_change_invalid_data_types",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Bad request\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"photo\": 123,\n  \"name\": true,\n  \"lastName\": [],\n  \"dateBirth\": \"invalid-date\",\n  \"country\": {}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "user_profile_change_below_min_length",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									"//pm.collectionVariables.set(\"country_test\", pm.variables.replaceIn(\"{{$randomCountry}}\")); не працює з назвами з 2-х слів",
+									"const allowedCountries = [",
+									"    \"Germany\",",
+									"    \"France\",",
+									"    \"Italy\",",
+									"    \"Egypt\",",
+									"    \"Poland\",",
+									"    \"Norway\",",
+									"    \"Sweden\",",
+									"    \"Finland\",",
+									"    \"Canada\"",
+									"];",
+									"",
+									"//Випадковий вибір з дозволеного списку",
+									"const randomIndex = Math.floor(Math.random() * allowedCountries.length);",
+									"const country = allowedCountries[randomIndex];",
+									"pm.collectionVariables.set(\"country_test\", country);",
+									"",
+									"pm.collectionVariables.set(\"dateBirth_test\", pm.variables.replaceIn(\"{{$randomDatePast}}\"));",
+									"",
+									"const min = 1000000000000;",
+									"const max = 9999999999999;",
+									"const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;",
+									"const photoFileName = `user-${randomNumber}.jpg`;",
+									"//console.log(\"photoFileName:\", photoFileName);",
+									"",
+									"pm.collectionVariables.set(\"photo_test\", photoFileName);",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Bad request\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"5\",\n  \"lastName\": \"4\"\n}\n//The field name can be any English symbol min =2 max = 20.  Need to ignore space and please use function trim. ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "user_profile_change_above_max_length",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									"//pm.collectionVariables.set(\"country_test\", pm.variables.replaceIn(\"{{$randomCountry}}\")); не працює з назвами з 2-х слів",
+									"const allowedCountries = [",
+									"    \"Germany\",",
+									"    \"France\",",
+									"    \"Italy\",",
+									"    \"Egypt\",",
+									"    \"Poland\",",
+									"    \"Norway\",",
+									"    \"Sweden\",",
+									"    \"Finland\",",
+									"    \"Canada\"",
+									"];",
+									"",
+									"//Випадковий вибір з дозволеного списку",
+									"const randomIndex = Math.floor(Math.random() * allowedCountries.length);",
+									"const country = allowedCountries[randomIndex];",
+									"pm.collectionVariables.set(\"country_test\", country);",
+									"",
+									"pm.collectionVariables.set(\"dateBirth_test\", pm.variables.replaceIn(\"{{$randomDatePast}}\"));",
+									"",
+									"const min = 1000000000000;",
+									"const max = 9999999999999;",
+									"const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;",
+									"const photoFileName = `user-${randomNumber}.jpg`;",
+									"//console.log(\"photoFileName:\", photoFileName);",
+									"",
+									"pm.collectionVariables.set(\"photo_test\", photoFileName);",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Bad request\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Sfdghjgjkhuigiujihghjgghgh\",\n  \"lastName\": \"nhghghvcgfcfgfcgvhggbhjgjhhjg\"\n}\n//The field name can be any English symbol min =2 max = 20.  Need to ignore space and please use function trim. ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "user_profile_change_empty_fields",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Bad request\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"\",\n  \"lastName\": \"\"\n}\n//\"Name is required\" and \"Last name is required\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "user_profile_change_future_date_of_birth",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									"//pm.collectionVariables.set(\"country_test\", pm.variables.replaceIn(\"{{$randomCountry}}\")); не працює з назвами з 2-х слів",
+									"const allowedCountries = [",
+									"    \"Germany\",",
+									"    \"France\",",
+									"    \"Italy\",",
+									"    \"Egypt\",",
+									"    \"Poland\",",
+									"    \"Norway\",",
+									"    \"Sweden\",",
+									"    \"Finland\",",
+									"    \"Canada\"",
+									"];",
+									"",
+									"//Випадковий вибір з дозволеного списку",
+									"const randomIndex = Math.floor(Math.random() * allowedCountries.length);",
+									"const country = allowedCountries[randomIndex];",
+									"pm.collectionVariables.set(\"country_test\", country);",
+									"",
+									"pm.collectionVariables.set(\"dateBirth_test\", pm.variables.replaceIn(\"{{$randomDatePast}}\"));",
+									"",
+									"const min = 1000000000000;",
+									"const max = 9999999999999;",
+									"const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;",
+									"const photoFileName = `user-${randomNumber}.jpg`;",
+									"//console.log(\"photoFileName:\", photoFileName);",
+									"",
+									"pm.collectionVariables.set(\"photo_test\", photoFileName);",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Bad request\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"photo\": \"{{photo_test}}\",\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"dateBirth\": \"2026-06-12T06:29:39.000Z\",\n  \"country\": \"{{country_test}}\"\n}\n\n//User can set their birthday (min 1900 max = current day)",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "user_profile_change_before_min_date_of_birth",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									"//pm.collectionVariables.set(\"country_test\", pm.variables.replaceIn(\"{{$randomCountry}}\")); не працює з назвами з 2-х слів",
+									"const allowedCountries = [",
+									"    \"Germany\",",
+									"    \"France\",",
+									"    \"Italy\",",
+									"    \"Egypt\",",
+									"    \"Poland\",",
+									"    \"Norway\",",
+									"    \"Sweden\",",
+									"    \"Finland\",",
+									"    \"Canada\"",
+									"];",
+									"",
+									"//Випадковий вибір з дозволеного списку",
+									"const randomIndex = Math.floor(Math.random() * allowedCountries.length);",
+									"const country = allowedCountries[randomIndex];",
+									"pm.collectionVariables.set(\"country_test\", country);",
+									"",
+									"pm.collectionVariables.set(\"dateBirth_test\", pm.variables.replaceIn(\"{{$randomDatePast}}\"));",
+									"",
+									"const min = 1000000000000;",
+									"const max = 9999999999999;",
+									"const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;",
+									"const photoFileName = `user-${randomNumber}.jpg`;",
+									"//console.log(\"photoFileName:\", photoFileName);",
+									"",
+									"pm.collectionVariables.set(\"photo_test\", photoFileName);",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Bad request\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"photo\": \"{{photo_test}}\",\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"dateBirth\": \"0226-06-12T06:29:39.000Z\",\n  \"country\": \"{{country_test}}\"\n}\n\n//User can set their birthday (min 1900 max = current day)",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "user_profile_change_invalid_country_name",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+									"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+									"//pm.collectionVariables.set(\"country_test\", pm.variables.replaceIn(\"{{$randomCountry}}\")); не працює з назвами з 2-х слів",
+									"const allowedCountries = [",
+									"    \"Germany\",",
+									"    \"France\",",
+									"    \"Italy\",",
+									"    \"Egypt\",",
+									"    \"Poland\",",
+									"    \"Norway\",",
+									"    \"Sweden\",",
+									"    \"Finland\",",
+									"    \"Canada\"",
+									"];",
+									"",
+									"//Випадковий вибір з дозволеного списку",
+									"const randomIndex = Math.floor(Math.random() * allowedCountries.length);",
+									"const country = allowedCountries[randomIndex];",
+									"pm.collectionVariables.set(\"country_test\", country);",
+									"",
+									"pm.collectionVariables.set(\"dateBirth_test\", pm.variables.replaceIn(\"{{$randomDatePast}}\"));",
+									"",
+									"const min = 1000000000000;",
+									"const max = 9999999999999;",
+									"const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;",
+									"const photoFileName = `user-${randomNumber}.jpg`;",
+									"//console.log(\"photoFileName:\", photoFileName);",
+									"",
+									"pm.collectionVariables.set(\"photo_test\", photoFileName);",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Поле status має текст 'error'\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"error\");",
+									"});",
+									"",
+									"pm.test(\"Поле message є рядком (string)\", function () {",
+									"    pm.expect(typeof jsonData.message).to.eql(\"string\");",
+									"});",
+									"",
+									"pm.test(\"Поле message містить правильний текст\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Bad request\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 2s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"photo\": \"{{photo_test}}\",\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"dateBirth\": \"2025-05-24T02:53:56.000Z\",\n  \"country\": \"nfjenkjhficjcewks\"\n}\n/* Field \"Country\"\nWrong length - \"Country has to be from 2 to 20 characters long\"\nWrong data - \"Country is invalid\"\nBorder color red */\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "registration_user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const names = ['Andriy', 'Olena', 'Serhii', 'Nadia', 'Ivan', 'Iryna'];",
+							"const surnames = ['Shevchenko', 'Skywalker', 'Petrenko', 'Bondarenko'];",
+							"const domains = ['gmail.com', 'yahoo.com', 'mail.com', 'outlook.com'];",
+							"const extraChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';",
+							"",
+							"// Випадкові елементи",
+							"const name = names[Math.floor(Math.random() * names.length)];",
+							"const surname = surnames[Math.floor(Math.random() * surnames.length)];",
+							"const domain = domains[Math.floor(Math.random() * domains.length)];",
+							"",
+							"// Додаємо 3 випадкових символи",
+							"let randomSuffix = '';",
+							"for (let i = 0; i < 3; i++) {",
+							"    randomSuffix += extraChars.charAt(Math.floor(Math.random() * extraChars.length));",
+							"}",
+							"",
+							"// Функція для форматування: перша літера велика, решта — малі",
+							"function capitalize(str) {",
+							"    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();",
+							"}",
+							"",
+							"const formattedName = capitalize(name);",
+							"const formattedSurname = capitalize(surname);",
+							"",
+							"// Формуємо email",
+							"const email = `${formattedName}.${formattedSurname}_${randomSuffix}@${domain}`;",
+							"",
+							"pm.collectionVariables.set(\"generatedEmail\", email);",
+							"// console.log(\"Згенерований email:\", email);",
+							"",
+							"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+							"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+							"pm.collectionVariables.set(\"password_test\", pm.variables.replaceIn(\"{{$randomPassword}}\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"// Email перевірка",
+							"pm.test(\"Email має валідний формат\", function () {",
+							"    const email = pm.collectionVariables.get(\"generatedEmail\");",
+							"    //console.log(\"email з колекційної змінної:\", email);",
+							"    const re = /^[A-Z][a-z]+\\.[A-Z][a-z]+_[a-z0-9_]{3}@[a-z]+\\.(com|net|org|ua|mail|outlook|yahoo|gmail)$/;",
+							"    pm.expect(email).to.match(re);",
+							"});",
+							"//  Збереження userId",
+							"pm.collectionVariables.set(\"userId\", jsonData.data.userId);",
+							"",
+							"const Ajv = require('ajv');",
+							"const ajv = new Ajv({ allErrors: true });",
+							"",
+							"const schema = {",
+							"    type: \"object\",",
+							"    required: [\"status\", \"data\"],",
+							"    properties: {",
+							"        status: { type: \"string\", enum: [\"ok\"] },",
+							"        data: {",
+							"            type: \"object\",",
+							"            required: [\"userId\", \"photoFilename\", \"distanceUnits\", \"currency\"],",
+							"            properties: {",
+							"                userId: { type: \"number\" },",
+							"                photoFilename: { type: \"string\" },",
+							"                distanceUnits: { type: \"string\", enum: [\"km\"] },",
+							"                currency: { type: \"string\", enum: [\"usd\"] }",
+							"            }",
+							"        }",
+							"    }",
+							"};",
+							"",
+							"const response = pm.response.json();",
+							"const validate = ajv.compile(schema);",
+							"const valid = validate(response);",
+							"",
+							"pm.test(\"Відповідь відповідає JSON-схемі (Ajv)\", function () {",
+							"    pm.expect(valid, JSON.stringify(validate.errors)).to.be.true;",
+							"});",
+							"",
+							"",
+							"//Перевірки HTTP",
+							"pm.test(\"Ststus code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 2s\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"/* ",
+							"// Перевірки JSON",
+							"pm.test(\" В полі currency значення: usd \", function () {",
+							"    pm.expect(jsonData.data.currency).to.eql(\"usd\");",
+							"});",
+							"",
+							"pm.test(\" В полі distanceUnits значення: km \", function () {",
+							"    pm.expect(jsonData.data.distanceUnits).to.eql(\"km\");",
+							"});",
+							"",
+							"pm.test(\"Поле userId існує і воно є числом\", function () {",
+							"    pm.expect(typeof jsonData.data.userId).to.eql(\"number\");",
+							"});",
+							"",
+							"pm.test(\"Поле photoFilename містить назву файлу зображення з правильним форматом\", function () {",
+							"    pm.expect(jsonData.data.photoFilename).to.match(/\\.(png|jpg|jpeg|gif|webp)$/i);",
+							"});",
+							"",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							" */",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"{{password_test}}\",\n  \"repeatPassword\": \"{{password_test}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/auth/signup",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"Anna\",\n  \"lastName\": \"Khan\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "user_profile_change",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"name_test\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));",
+							"pm.collectionVariables.set(\"lastName_test\", pm.variables.replaceIn(\"{{$randomLastName}}\"));",
+							"//pm.collectionVariables.set(\"country_test\", pm.variables.replaceIn(\"{{$randomCountry}}\")); не працює з назвами з 2-х слів",
+							"const allowedCountries = [",
+							"    \"Germany\",",
+							"    \"France\",",
+							"    \"Italy\",",
+							"    \"Egypt\",",
+							"    \"Poland\",",
+							"    \"Norway\",",
+							"    \"Sweden\",",
+							"    \"Finland\",",
+							"    \"Canada\"",
+							"];",
+							"",
+							"//Випадковий вибір з дозволеного списку",
+							"const randomIndex = Math.floor(Math.random() * allowedCountries.length);",
+							"const country = allowedCountries[randomIndex];",
+							"pm.collectionVariables.set(\"country_test\", country);",
+							"",
+							"pm.collectionVariables.set(\"dateBirth_test\", pm.variables.replaceIn(\"{{$randomDatePast}}\"));",
+							"",
+							"const min = 1000000000000;",
+							"const max = 9999999999999;",
+							"const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;",
+							"const photoFileName = `user-${randomNumber}.jpg`;",
+							"//console.log(\"photoFileName:\", photoFileName);",
+							"",
+							"pm.collectionVariables.set(\"photo_test\", photoFileName);",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Відповідь відповідає надісланим даним профілю\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    const expectedName = pm.collectionVariables.get(\"name_test\");",
+							"    const expectedLastName = pm.collectionVariables.get(\"lastName_test\");",
+							"    const expectedDateBirthRaw = pm.collectionVariables.get(\"dateBirth_test\");",
+							"    const expectedCountry = pm.collectionVariables.get(\"country_test\");",
+							"    const expectedDateBirth = new Date(expectedDateBirthRaw).toISOString();",
+							"",
+							"    pm.expect(jsonData.data.name).to.eql(expectedName);",
+							"    pm.expect(jsonData.data.lastName).to.eql(expectedLastName);",
+							"    pm.expect(jsonData.data.dateBirth).to.eql(expectedDateBirth);",
+							"    pm.expect(jsonData.data.country).to.eql(expectedCountry);",
+							"",
+							"    // pm.expect(jsonData.data.photoFilename).to.eql(pm.collectionVariables.get(\"photo_test\"));",
+							"    // сервер повертає default-user.png",
+							"});",
+							"",
+							"",
+							"pm.test(\"Поле photoFilename містить назву файлу зображення з правильним форматом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.photoFilename).to.match(/\\.(png|jpg|jpeg|gif|webp)$/i);",
+							"});",
+							"",
+							"pm.test(\"Ststus code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 2s\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"photo\": \"{{photo_test}}\",\n  \"name\": \"{{name_test}}\",\n  \"lastName\": \"{{lastName_test}}\",\n  \"dateBirth\": \"{{dateBirth_test}}\",\n  \"country\": \"{{country_test}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/users/profile",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2097-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "user_password_change",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"",
+							"// 1. Взяти поточний пароль",
+							"const oldPassword = pm.collectionVariables.get(\"password_test\");",
+							"// 2. Зберегти старий як окрему змінну для oldPassword",
+							"pm.collectionVariables.set(\"old_password_test\", oldPassword);",
+							"// 3. Згенерувати новий пароль",
+							"const newPassword = pm.variables.replaceIn(\"{{$randomPassword}}\");",
+							"// 4. Оновити основний пароль",
+							"pm.collectionVariables.set(\"password_test\", newPassword);",
+							"",
+							"//console.log(\"oldPassword:\", oldPassword);",
+							"//console.log(\"newPassword:\", newPassword);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"userId відповідає значенню при створенні користувача\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    const createdUserId = pm.collectionVariables.get(\"userId\");",
+							"    const responseUserId = jsonData.data.userId;",
+							"",
+							"    //console.log(\"userId з відповіді:\", responseUserId);",
+							"    //console.log(\"userId з колекційної змінної:\", createdUserId);",
+							"",
+							"    pm.expect(responseUserId).to.eql(parseInt(createdUserId));",
+							"});",
+							"",
+							"pm.test(\"Ststus code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 2s\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"oldPassword\": \"{{old_password_test}}\",\n  \"password\": \"{{password_test}}\",\n  \"repeatPassword\": \"{{password_test}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/users/password",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"users",
+						"password"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/password' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"oldPassword\": \"FooBar12345\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\" Поле status має значення ОК\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"ok\");",
+							"});",
+							"",
+							"pm.test(\"Ststus code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 2s\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/auth/logout",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/auth/logout' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"",
+							"const Ajv = require('ajv');",
+							"const ajv = new Ajv({ allErrors: true });",
+							"",
+							"const schema = {",
+							"    type: \"object\",",
+							"    required: [\"status\", \"data\"],",
+							"    properties: {",
+							"        status: { type: \"string\", enum: [\"ok\"] },",
+							"        data: {",
+							"            type: \"object\",",
+							"            required: [\"userId\", \"photoFilename\", \"distanceUnits\", \"currency\"],",
+							"            properties: {",
+							"                userId: { type: \"number\" },",
+							"                photoFilename: { type: \"string\" },",
+							"                distanceUnits: { type: \"string\", enum: [\"km\"] },",
+							"                currency: { type: \"string\", enum: [\"usd\"] }",
+							"            }",
+							"        }",
+							"    }",
+							"};",
+							"",
+							"const response = pm.response.json();",
+							"const validate = ajv.compile(schema);",
+							"const valid = validate(response);",
+							"",
+							"pm.test(\"Відповідь відповідає JSON-схемі (Ajv)\", function () {",
+							"    pm.expect(valid, JSON.stringify(validate.errors)).to.be.true;",
+							"});",
+							"",
+							"",
+							"",
+							"pm.test(\"Ststus code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 2s\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"{{generatedEmail}}\",\n  \"password\": \"{{password_test}}\",\n  \"remember\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/auth/signin",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"auth",
+						"signin"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signin' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"remember\": false\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "creates_new_car",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Випадковий carBrandId (1–5)",
+							"const carBrandId = Math.floor(Math.random() * 5) + 1;",
+							"",
+							"// Логіка відповідності carModelId до carBrandId",
+							"let carModelIdRange = [];",
+							"switch (carBrandId) {",
+							"    case 1:",
+							"        carModelIdRange = [1, 5];",
+							"        break;",
+							"    case 2:",
+							"        carModelIdRange = [6, 10];",
+							"        break;",
+							"    case 3:",
+							"        carModelIdRange = [11, 15];",
+							"        break;",
+							"    case 4:",
+							"        carModelIdRange = [16, 18];",
+							"        break;",
+							"    case 5:",
+							"        carModelIdRange = [19, 23];",
+							"        break;",
+							"}",
+							"",
+							"// Генеруємо carModelId в межах діапазону",
+							"const carModelId = Math.floor(Math.random() * (carModelIdRange[1] - carModelIdRange[0] + 1)) + carModelIdRange[0];",
+							"",
+							"// Генеруємо mileage дозволено 0–999999",
+							"const mileage = Math.floor(Math.random() * 1000);",
+							"",
+							"// Зберігаємо значення у змінні колекції",
+							"pm.collectionVariables.set(\"carBrandId\", carBrandId);",
+							"pm.collectionVariables.set(\"carModelId\", carModelId);",
+							"pm.collectionVariables.set(\"mileage\", mileage);",
+							"",
+							"//console.log(\"carBrandId:\", carBrandId);",
+							"//console.log(\"carModelId:\", carModelId);",
+							"//console.log(\"mileage:\", mileage);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"//console.log (\"carId\", jsonData.data.id);",
+							"pm.collectionVariables.set(\"carId\" , jsonData.data.id)",
+							"pm.collectionVariables.set(\"carCreatedAt\",jsonData.data.carCreatedAt);",
+							"",
+							"pm.test(\"Поле model є текстом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.model).to.eql(\"string\");",
+							"});",
+							"",
+							"pm.test(\"Поле brand є текстом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.brand).to.eql(\"string\");",
+							"});",
+							"",
+							"pm.test(\"Поле logo є текстом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.logo).to.eql(\"string\");",
+							"});",
+							"",
+							"pm.test(\"Поле carBrandId є числом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.carBrandId).to.eql(\"number\");",
+							"});",
+							"",
+							"pm.test(\"Поле carModelId є числом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.carModelId).to.eql(\"number\");",
+							"});",
+							"",
+							"pm.test(\"Поле initialMileage є числом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.initialMileage).to.eql(\"number\");",
+							"});",
+							"",
+							"pm.test(\"Поле mileage є числом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.mileage).to.eql(\"number\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Ststus code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 2s\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"carBrandId\": {{carBrandId}},\n  \"carModelId\": {{carModelId}},\n  \"mileage\": {{mileage}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/cars",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"cars"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/cars' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"carBrandId\": 1,\n  \"carModelId\": 1,\n  \"mileage\": 122\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "cars/brands_in_Hillel_Qauto",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/cars/brands",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"cars",
+						"brands"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/cars/brands' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "cars/models_in_Hillel_Qauto",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/cars/models",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"cars",
+						"models"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/cars/models' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "users_cars_info",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/cars",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"cars"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/cars' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "users/profile",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/users/profile",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "expenses",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//  Mileage",
+							"let mileage = parseInt(pm.collectionVariables.get(\"mileage\")) || 0;",
+							"let mileageAdd = Math.floor(Math.random() * 20) + 1;",
+							"mileage += mileageAdd;",
+							"pm.collectionVariables.set(\"mileage\", mileage);",
+							"",
+							"//  Liters",
+							"let liters = parseInt(pm.collectionVariables.get(\"liters\")) || 0;",
+							"let litersAdd = Math.floor(Math.random() * 10) + 1;",
+							"liters += litersAdd;",
+							"pm.collectionVariables.set(\"liters\", liters);",
+							"",
+							"//  Total Cost",
+							"let totalCost = parseInt(pm.collectionVariables.get(\"totalCost\")) || 0;",
+							"let costAdd = Math.floor(Math.random() * 10) + 1;",
+							"totalCost += costAdd;",
+							"pm.collectionVariables.set(\"totalCost\", totalCost);",
+							"",
+							"//console.log(`Mileage: ${mileage}, Liters: ${liters}, Cost: ${totalCost}`);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Ststus code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 2s\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"/* pm.test(\"Поле liters є числом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.liters).to.eql(\"number\");",
+							"});",
+							"pm.test(\"Поле id є числом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.id).to.eql(\"number\");",
+							"});",
+							"pm.test(\"Поле mileage є числом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.mileage).to.eql(\"number\");",
+							"});",
+							"pm.test(\"Поле totalCost є числом\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(typeof jsonData.data.totalCost).to.eql(\"number\");",
+							"}); */"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"carId\": {{carId}},\n  \"reportedAt\": \"{{$isoTimestamp}}\",\n  \"mileage\": {{mileage}},\n  \"liters\": {{liters}},\n  \"totalCost\": {{totalCost}},\n  \"forceMileage\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/expenses",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"expenses"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/expenses' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"carId\": 1,\n  \"reportedAt\": \"2025-05-19\",\n  \"mileage\": 111,\n  \"liters\": 11,\n  \"totalCost\": 11,\n  \"forceMileage\": false\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "delete_users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\" Поле status має значення ОК\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"ok\");",
+							"});",
+							"",
+							"pm.test(\"Ststus code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 2s\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/users",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "Generated from cURL: curl -X 'DELETE' \\\n  'https://qauto.forstudy.space/api/users' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "name_test",
+			"value": "Isai"
+		},
+		{
+			"key": "lastName_test",
+			"value": "Okuneva"
+		},
+		{
+			"key": "password_test",
+			"value": "Wa581GyuEDtklPd"
+		},
+		{
+			"key": "country_test",
+			"value": "France"
+		},
+		{
+			"key": "dateBirth_test",
+			"value": "Fri Jun 28 2024 22:57:29 GMT+0300 (Eastern European Summer Time)"
+		},
+		{
+			"key": "photo_test",
+			"value": "user-8752918436582.jpg",
+			"type": "string"
+		},
+		{
+			"key": "old_password_test",
+			"value": "iFiGctU5ArarCVR"
+		},
+		{
+			"key": "carBrandId",
+			"value": 3
+		},
+		{
+			"key": "carModelId",
+			"value": 14
+		},
+		{
+			"key": "mileage",
+			"value": 462
+		},
+		{
+			"key": "carId",
+			"value": 349852
+		},
+		{
+			"key": "carCreatedAt",
+			"value": "2025-05-22T18:23:04.282Z"
+		},
+		{
+			"key": "reportedAt",
+			"value": "2025-05-20T09:34:49.998Z"
+		},
+		{
+			"key": "userId",
+			"value": 221716
+		},
+		{
+			"key": "liters",
+			"value": 384
+		},
+		{
+			"key": "totalCost",
+			"value": 136
+		},
+		{
+			"key": "generatedEmail",
+			"value": "Iryna.Petrenko_bi0@mail.com"
+		}
+	]
+}
