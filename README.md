@@ -11,3 +11,4 @@
 - 16.1. Тестування Ukrainian Cities
 - 18.1. Тестування SOAP API
 - 20.1. Запус колекції qauto через jenkins
+- 21.1. Грузимо localhost
