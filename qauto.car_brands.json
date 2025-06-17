@@ -1,0 +1,65 @@
+[{
+  "_id": {
+    "$oid": "6851d40966df9ce58407d58f"
+  },
+  "title": "Tesla",
+  "logoFilename": "tesla.png",
+  "createdAt": {
+    "$date": "2023-01-01T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-01-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6851d40966df9ce58407d590"
+  },
+  "title": "BMW",
+  "logoFilename": "bmw.png",
+  "createdAt": {
+    "$date": "2023-02-01T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-02-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6851d40966df9ce58407d591"
+  },
+  "title": "Audi",
+  "logoFilename": "audi.png",
+  "createdAt": {
+    "$date": "2023-03-01T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-03-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6851d40966df9ce58407d592"
+  },
+  "title": "Toyota",
+  "logoFilename": "toyota.png",
+  "createdAt": {
+    "$date": "2023-04-01T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-04-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6851d40966df9ce58407d593"
+  },
+  "title": "Nissan",
+  "logoFilename": "nissan.png",
+  "createdAt": {
+    "$date": "2023-05-01T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-05-01T00:00:00.000Z"
+  }
+}]
