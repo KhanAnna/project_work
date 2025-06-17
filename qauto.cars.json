@@ -1,0 +1,110 @@
+[{
+  "_id": {
+    "$oid": "6851d43066df9ce58407d59d"
+  },
+  "carBrandId": 1,
+  "carModelId": 1,
+  "userId": 1,
+  "mileage": 12000,
+  "initialMileage": 10000,
+  "updatedMileageAt": {
+    "$date": "2024-06-01T00:00:00.000Z"
+  },
+  "carCreatedAt": {
+    "$date": "2021-01-01T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6851d43066df9ce58407d59e"
+  },
+  "carBrandId": 2,
+  "carModelId": 3,
+  "userId": 2,
+  "mileage": 15000,
+  "initialMileage": 13000,
+  "updatedMileageAt": {
+    "$date": "2024-06-02T00:00:00.000Z"
+  },
+  "carCreatedAt": {
+    "$date": "2020-02-01T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6851d43066df9ce58407d59f"
+  },
+  "carBrandId": 3,
+  "carModelId": 4,
+  "userId": 3,
+  "mileage": 18000,
+  "initialMileage": 16000,
+  "updatedMileageAt": {
+    "$date": "2024-06-03T00:00:00.000Z"
+  },
+  "carCreatedAt": {
+    "$date": "2020-03-01T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6851d43066df9ce58407d5a0"
+  },
+  "carBrandId": 4,
+  "carModelId": 5,
+  "userId": 4,
+  "mileage": 20000,
+  "initialMileage": 17000,
+  "updatedMileageAt": {
+    "$date": "2024-06-04T00:00:00.000Z"
+  },
+  "carCreatedAt": {
+    "$date": "2020-04-01T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6851d43066df9ce58407d5a1"
+  },
+  "carBrandId": 5,
+  "carModelId": 5,
+  "userId": 5,
+  "mileage": 9000,
+  "initialMileage": 8000,
+  "updatedMileageAt": {
+    "$date": "2024-06-05T00:00:00.000Z"
+  },
+  "carCreatedAt": {
+    "$date": "2020-05-01T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-10T00:00:00.000Z"
+  }
+}]
